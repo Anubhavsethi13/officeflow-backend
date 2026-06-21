@@ -1,0 +1,23 @@
+export const apiDocumentation = {
+  tags: ["Attendance", "Leaves", "Products", "Inventory", "Vendors", "Customers", "Invoices"].map((name) => ({ name })),
+  components: { securitySchemes: { bearerAuth: { type: "http", scheme: "bearer", bearerFormat: "JWT" } } },
+  security: [{ bearerAuth: [] }],
+  paths: {
+    "/attendance": { get: { tags: ["Attendance"], summary: "List attendance records", responses: { "200": { description: "Attendance records" } } } },
+    "/attendance/check-in": { post: { tags: ["Attendance"], summary: "Check in the current employee", responses: { "201": { description: "Attendance record" } } } },
+    "/attendance/check-out": { post: { tags: ["Attendance"], summary: "Check out the current employee", responses: { "200": { description: "Attendance record" } } } },
+    "/leaves": { get: { tags: ["Leaves"], summary: "List leave requests", responses: { "200": { description: "Leave requests" } } } },
+    "/leaves/request": { post: { tags: ["Leaves"], summary: "Request leave", responses: { "201": { description: "Leave request" } } } },
+    "/leaves/{id}/approve": { put: { tags: ["Leaves"], summary: "Approve leave", responses: { "200": { description: "Approved leave" } } } },
+    "/leaves/{id}/reject": { put: { tags: ["Leaves"], summary: "Reject leave", responses: { "200": { description: "Rejected leave" } } } },
+    "/products": { get: { tags: ["Products"], summary: "List products", responses: { "200": { description: "Products" } } }, post: { tags: ["Products"], summary: "Create product", responses: { "201": { description: "Product" } } } },
+    "/inventory": { get: { tags: ["Inventory"], summary: "List current stock", responses: { "200": { description: "Inventory" } } } },
+    "/inventory/stock-in": { post: { tags: ["Inventory"], summary: "Add stock", responses: { "200": { description: "Updated inventory" } } } },
+    "/inventory/stock-out": { post: { tags: ["Inventory"], summary: "Remove stock", responses: { "200": { description: "Updated inventory" } } } },
+    "/vendors": { get: { tags: ["Vendors"], summary: "List vendors", responses: { "200": { description: "Vendors" } } }, post: { tags: ["Vendors"], summary: "Create vendor", responses: { "201": { description: "Vendor" } } } },
+    "/customers": { get: { tags: ["Customers"], summary: "List customers", responses: { "200": { description: "Customers" } } }, post: { tags: ["Customers"], summary: "Create customer", responses: { "201": { description: "Customer" } } } },
+    "/invoices": { get: { tags: ["Invoices"], summary: "List invoices", responses: { "200": { description: "Invoices" } } }, post: { tags: ["Invoices"], summary: "Create invoice and deduct stock", responses: { "201": { description: "Invoice" } } } },
+    "/invoices/{id}": { get: { tags: ["Invoices"], summary: "Get invoice", responses: { "200": { description: "Invoice" } } } },
+    "/invoices/{id}/pdf": { get: { tags: ["Invoices"], summary: "Download invoice PDF", responses: { "200": { description: "PDF invoice" } } } },
+  },
+};

@@ -1,0 +1,10 @@
+import { Router } from "express";
+import * as controller from "../controllers/invoice.controller";
+import { authenticate } from "../middlewares/auth.middleware";
+import { requirePermission } from "../middlewares/role.middleware";
+export const invoiceRoutes = Router();
+invoiceRoutes.use(authenticate);
+invoiceRoutes.post("/", requirePermission("Invoices", "canCreate"), controller.create);
+invoiceRoutes.get("/", requirePermission("Invoices", "canView"), controller.list);
+invoiceRoutes.get("/:id/pdf", requirePermission("Invoices", "canView"), controller.pdf);
+invoiceRoutes.get("/:id", requirePermission("Invoices", "canView"), controller.get);

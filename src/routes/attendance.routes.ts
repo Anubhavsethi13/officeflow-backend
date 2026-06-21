@@ -1,0 +1,10 @@
+import { Router } from "express";
+import * as controller from "../controllers/attendance.controller";
+import { authenticate } from "../middlewares/auth.middleware";
+import { requirePermission } from "../middlewares/role.middleware";
+export const attendanceRoutes = Router();
+attendanceRoutes.use(authenticate);
+attendanceRoutes.get("/", requirePermission("Attendance", "canView"), controller.list);
+attendanceRoutes.post("/check-in", controller.checkIn);
+attendanceRoutes.post("/check-out", controller.checkOut);
+attendanceRoutes.get("/employee/:id", requirePermission("Attendance", "canView"), controller.employeeHistory);

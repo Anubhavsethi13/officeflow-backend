@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   const roles = ["SUPER_ADMIN", "MD", "DEPARTMENT_HEAD", "PAYROLL_MANAGER", "EMPLOYEE"];
-  const modules = ["Employee Management", "Task Management", "Payroll", "Employee Portal", "Access Control", "Dashboard"];
+  const modules = ["Employee Management", "Task Management", "Payroll", "Employee Portal", "Access Control", "Dashboard", "Attendance", "Leave Management", "Warehouse Management", "Invoices"];
 
   for (const name of roles) {
     await prisma.role.upsert({ where: { name }, update: {}, create: { name } });
