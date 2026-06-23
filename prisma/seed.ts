@@ -49,6 +49,15 @@ async function main() {
     update: {},
     create: { name: "Operations" },
   });
+  
+  const depts = ["Support", "Software", "Hardware", "Accounts", "Consumables"];
+  for (const deptName of depts) {
+    await prisma.department.upsert({
+      where: { name: deptName },
+      update: {},
+      create: { name: deptName },
+    });
+  }
 
   const adminEmployee = await prisma.employee.create({
     data: {

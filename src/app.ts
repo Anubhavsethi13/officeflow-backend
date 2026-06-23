@@ -11,8 +11,12 @@ import { apiDocumentation } from "./config/swagger";
 export const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: process.env.CORS_ORIGIN?.split(",") || true, credentials: true }));
-app.use(rateLimit({ windowMs: 15 * 60 * 1000, limit: 100 }));
+
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(",").map((origin) => origin.trim())
+  : true;
+
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -26,8 +30,12 @@ const swaggerSpec = swaggerJSDoc({
   apis: ["./src/routes/*.ts"],
 });
 
+// Exclude /health and Swagger docs from rate limiting
 app.get("/health", (_req, res) => res.json({ success: true, data: { status: "ok" } }));
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use("/api", apiRoutes);
+
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 100 });
+app.use("/api", limiter, apiRoutes);
+
 app.use(notFound);
 app.use(errorMiddleware);

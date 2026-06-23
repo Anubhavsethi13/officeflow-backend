@@ -55,3 +55,9 @@ export async function uploadDocument(req: Request, res: Response) {
   });
   return ok(res, document, 201);
 }
+
+export async function deleteDocument(req: Request, res: Response) {
+  const docId = req.params.docId as string;
+  await prisma.employeeDocument.delete({ where: { id: docId } });
+  return ok(res, { message: "Document deleted" });
+}

@@ -5,12 +5,22 @@ All endpoints are rooted at `/api`, return `{ success, data }`, and require `Aut
 | Endpoint | Method | Body | Permission |
 | --- | --- | --- | --- |
 | `/attendance` | GET | - | Attendance view |
+| `/attendance` | PUT | `employeeId`, `date`, `status`, optional `checkIn`, `checkOut` | Attendance update |
 | `/attendance/check-in`, `/attendance/check-out` | POST | - | Authenticated employee |
 | `/attendance/employee/:id` | GET | - | Attendance view |
+| `/auth/login` | POST | `email`, `password` | Public |
+| `/auth/me` | GET | - | Authenticated user |
 | `/leaves` | GET | - | Leave Management view |
 | `/leaves/request` | POST | `type`, `fromDate`, `toDate` | Authenticated employee |
 | `/leaves/:id/approve`, `/leaves/:id/reject` | PUT | - | Super Admin, MD, Department Head |
 | `/leaves/employee/:id` | GET | - | Leave Management view |
+| `/employees` | GET, POST | Employee payload | Employee Management view/create |
+| `/employees/:id` | PATCH, DELETE | Employee patch | Employee Management update/delete |
+| `/employees/:id/profile` | GET | - | Employee Portal view |
+| `/tasks` | GET, POST | Task payload | Task Management view/create |
+| `/tasks/:id` | PATCH | Task patch | Task Management update |
+| `/tasks/:id/assign` | POST | `assignedTo` | Task Management update |
+| `/tasks/:id/history` | GET | - | Task Management view |
 | `/products` | GET, POST | `name`, `sku`, optional `categoryId` | Warehouse view/create |
 | `/products/:id` | PUT, DELETE | Product fields | Warehouse update/delete |
 | `/inventory` | GET | - | Warehouse view |

@@ -10,6 +10,7 @@ import { attendanceRoutes } from "./attendance.routes";
 import { leaveRoutes } from "./leave.routes";
 import { customerRoutes, inventoryRoutes, productRoutes, vendorRoutes } from "./wms.routes";
 import { invoiceRoutes } from "./invoice.routes";
+import { departmentRoutes } from "./department.routes";
 
 export const apiRoutes = Router();
 
@@ -27,3 +28,4 @@ apiRoutes.use("/inventory", inventoryRoutes);
 apiRoutes.use("/vendors", vendorRoutes);
 apiRoutes.use("/customers", customerRoutes);
 apiRoutes.use("/invoices", invoiceRoutes);
+apiRoutes.use("/departments", departmentRoutes);

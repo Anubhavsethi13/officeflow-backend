@@ -5,7 +5,7 @@ import { requirePermission, requireRole } from "../middlewares/role.middleware";
 export const leaveRoutes = Router();
 leaveRoutes.use(authenticate);
 leaveRoutes.get("/", requirePermission("Leave Management", "canView"), controller.list);
-leaveRoutes.post("/request", controller.request);
+leaveRoutes.post("/request", requirePermission("Employee Portal", "canCreate"), controller.request);
 leaveRoutes.put("/:id/approve", requireRole("SUPER_ADMIN", "MD", "DEPARTMENT_HEAD"), controller.approve);
 leaveRoutes.put("/:id/reject", requireRole("SUPER_ADMIN", "MD", "DEPARTMENT_HEAD"), controller.reject);
 leaveRoutes.get("/employee/:id", requirePermission("Leave Management", "canView"), controller.employeeHistory);

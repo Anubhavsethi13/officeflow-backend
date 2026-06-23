@@ -2,11 +2,25 @@ import { z } from "zod";
 
 export const employeeCreateSchema = z.object({
   name: z.string().min(2),
-  phone: z.string().optional(),
-  departmentId: z.string().uuid().optional(),
+  phone: z.string().optional().nullable(),
+  departmentId: z.string().uuid().optional().nullable(),
   designation: z.string().min(2),
   joiningDate: z.coerce.date(),
-  currentSalary: z.number().positive().optional(),
+  currentSalary: z.number().positive().optional().nullable(),
+  email: z.string().email().optional().nullable(),
+  password: z.string().min(6).optional().nullable(),
+  role: z.enum([
+    "Super Admin",
+    "MD",
+    "Department Head",
+    "Payroll Manager",
+    "Employee",
+    "SUPER_ADMIN",
+    "MD",
+    "DEPARTMENT_HEAD",
+    "PAYROLL_MANAGER",
+    "EMPLOYEE",
+  ]).optional().nullable(),
 });
 
 export const employeeUpdateSchema = employeeCreateSchema.partial().extend({

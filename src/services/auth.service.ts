@@ -1,12 +1,15 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "../config/database";
 import { AppError } from "../utils/app-error";
-import { signAccessToken, signRefreshToken } from "../utils/jwt";
+import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../utils/jwt";
 
 export async function login(email: string, password: string) {
   const user = await prisma.user.findUnique({
     where: { email },
-    include: { role: true, employee: true },
+    include: {
+      role: true,
+      employee: { include: { department: true } },
+    },
   });
 
   if (!user || user.status !== "ACTIVE" || !(await bcrypt.compare(password, user.password))) {
@@ -35,4 +38,41 @@ export async function login(email: string, password: string) {
 export async function logout(userId: string) {
   await prisma.user.update({ where: { id: userId }, data: { refreshToken: null } });
   await prisma.auditLog.create({ data: { userId, action: "LOGOUT", resource: "auth" } });
+}
+
+export async function refresh(token: string) {
+  try {
+    const payload = verifyRefreshToken(token);
+    const user = await prisma.user.findUnique({
+      where: { id: payload.sub },
+      include: {
+        role: true,
+        employee: { include: { department: true } },
+      },
+    });
+
+    if (!user || user.status !== "ACTIVE" || user.refreshToken !== token) {
+      throw new AppError("Invalid refresh token", 401);
+    }
+
+    const nextPayload = { sub: user.id, role: user.role.name, employeeId: user.employeeId || undefined };
+    const accessToken = signAccessToken(nextPayload);
+    const refreshToken = signRefreshToken(nextPayload);
+
+    await prisma.user.update({ where: { id: user.id }, data: { refreshToken } });
+
+    return {
+      accessToken,
+      refreshToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role.name,
+        employee: user.employee,
+      },
+    };
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+    throw new AppError("Invalid refresh token", 401);
+  }
 }
