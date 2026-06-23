@@ -22,6 +22,7 @@ model User {
   role         Role       @relation(fields: [roleId], references: [id])
   auditLogs    AuditLog[]
 
+  @@index([roleId])
   @@map("users")
 }
 
@@ -86,6 +87,7 @@ model Employee {
   createdTasks  Task[]              @relation("TaskCreator")
   user          User?
 
+  @@index([departmentId])
   @@map("employees")
 }
 
@@ -98,6 +100,7 @@ model EmployeeDocument {
   createdAt  DateTime @default(now()) @map("created_at")
   employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 
+  @@index([employeeId])
   @@map("employee_documents")
 }
 
@@ -135,6 +138,7 @@ model Leave {
   status     LeaveStatus @default(PENDING)
   employee   Employee    @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 
+  @@index([employeeId])
   @@map("leaves")
 }
 
@@ -146,6 +150,7 @@ model SalaryHistory {
   incrementDate DateTime @map("increment_date") @db.Date
   employee      Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 
+  @@index([employeeId])
   @@map("salary_history")
 }
 
@@ -165,6 +170,8 @@ model Task {
   assignee    Employee?     @relation("TaskAssignee", fields: [assignedTo], references: [id])
   creator     Employee      @relation("TaskCreator", fields: [createdBy], references: [id])
 
+  @@index([assignedTo])
+  @@index([createdBy])
   @@map("tasks")
 }
 
@@ -178,6 +185,8 @@ model TaskHistory {
   task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   updater   Employee @relation(fields: [updatedBy], references: [id])
 
+  @@index([taskId])
+  @@index([updatedBy])
   @@map("task_history")
 }
 
@@ -190,6 +199,7 @@ model AuditLog {
   createdAt DateTime @default(now()) @map("created_at")
   user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
 
+  @@index([userId])
   @@map("audit_logs")
 }
 
@@ -211,6 +221,7 @@ model Product {
   invoiceItems SalesInvoiceItem[]
   movements    StockMovement[]
 
+  @@index([categoryId])
   @@map("products")
 }
 
@@ -231,6 +242,7 @@ model StockMovement {
   createdAt DateTime @default(now()) @map("created_at")
   product   Product  @relation(fields: [productId], references: [id])
 
+  @@index([productId])
   @@map("stock_movements")
 }
 
@@ -262,6 +274,7 @@ model SalesInvoice {
   items         SalesInvoiceItem[]
   customer      Customer             @relation(fields: [customerId], references: [id])
 
+  @@index([customerId])
   @@map("sales_invoices")
 }
 
@@ -274,6 +287,8 @@ model SalesInvoiceItem {
   invoice   SalesInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
   product   Product      @relation(fields: [productId], references: [id])
 
+  @@index([invoiceId])
+  @@index([productId])
   @@map("sales_invoice_items")
 }
 

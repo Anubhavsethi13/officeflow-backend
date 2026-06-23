@@ -1,3 +1,4 @@
+import compression from "compression";
 import cors from "cors";
 import express from "express";
 import rateLimit from "express-rate-limit";
@@ -11,6 +12,7 @@ import { apiDocumentation } from "./config/swagger";
 export const app = express();
 
 app.use(helmet());
+app.use(compression());
 
 const allowedOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",").map((origin) => origin.trim())
