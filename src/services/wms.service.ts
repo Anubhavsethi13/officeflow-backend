@@ -32,3 +32,6 @@ export const customers = {
   update: (id: string, data: Partial<ContactData>) => prisma.customer.update({ where: { id }, data }).catch(() => missing("Customer")),
   remove: (id: string) => prisma.customer.delete({ where: { id } }).catch(() => missing("Customer")),
 };
+
+export async function movements() { return prisma.stockMovement.findMany({ include: { product: true }, orderBy: { createdAt: "desc" } }); }
+
